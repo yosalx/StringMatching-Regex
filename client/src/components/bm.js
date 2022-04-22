@@ -1,4 +1,6 @@
-function bmMatch(text, pattern){
+import React from "react";
+
+function bmMatch(text, pattern) {
   let last = buildLast(pattern);
   let n = text.length;
   let m = pattern.length;
@@ -20,17 +22,14 @@ function bmMatch(text, pattern){
       i = i + m - Math.min(j, 1 + lo);
       j = m - 1;
     }
-  } 
-  while (i <= n - 1);
+  } while (i <= n - 1);
   return -1;
 }
 
-function buildLast(pattern){
-  const last = []
-  for (let i = 0; i < 128; i++)
-    last[i] = -1; // initialize array
-  for (let i = 0; i < pattern.length; i++)
-    last[pattern.charCodeAt(i)] = i;
+function buildLast(pattern) {
+  const last = [];
+  for (let i = 0; i < 128; i++) last[i] = -1; // initialize array
+  for (let i = 0; i < pattern.length; i++) last[pattern.charCodeAt(i)] = i;
   return last;
 } // end of buildLast()
 

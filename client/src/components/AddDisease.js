@@ -5,10 +5,22 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 
 export default function AddDisease() {
+  const showFile = (e) => {
+    e.preventDefault();
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const text = e.target.result;
+      setForm({ nama: form.nama, dna: text });
+      console.log(text);
+    };
+    reader.readAsText(e.target.files[0]);
+  };
+
   const [form, setForm] = useState({
     nama: "",
     dna: "",
   });
+
   const navigate = useNavigate();
 
   // These methods will update the state properties.
@@ -51,6 +63,7 @@ export default function AddDisease() {
         Add Disease
       </h4>
       <Form
+        onSubmit={onSubmit}
         style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}
       >
         <Form.Group
@@ -60,12 +73,19 @@ export default function AddDisease() {
           <Form.Label style={{ display: "flex", justifyContent: "center" }}>
             Enter The Disease Name
           </Form.Label>
-          <Form.Control required type="text" placeholder="Name..." />
+          <Form.Control
+            required
+            type="text"
+            placeholder="Name..."
+            id="nama"
+            value={form.nama}
+            onChange={(e) => updateForm({ nama: e.target.value })}
+          />
           <br />
           <Form.Label style={{ display: "flex", justifyContent: "center" }}>
             Input The Sequence DNA
           </Form.Label>
-          <Form.Control required type="file" />
+          <Form.Control required type="file" id="dna" onChange={showFile} />
           <br />
           <div style={{ display: "flex", justifyContent: "center" }}>
             <Button

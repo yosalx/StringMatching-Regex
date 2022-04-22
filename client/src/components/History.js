@@ -5,6 +5,8 @@ import Button from "react-bootstrap/Button";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
+// list all the record that match the regex
+
 const History = () => {
   return (
     <div style={{ marginTop: "30px" }}>

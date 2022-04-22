@@ -1,20 +1,25 @@
-function computeFail(pattern){
-  const fail = []
+import React from "react";
+
+function computeFail(pattern) {
+  const fail = [];
   fail[0] = 0;
   let m = pattern.length;
   let j = 0;
   let i = 1;
   while (i < m) {
-      if (pattern.charAt(j) == pattern.charAt(i)) { // j+1 chars match
-          fail[i] = j + 1;
-          i++;
-          j++;
-      } else if (j > 0) // j follows matching prefix
-          j = fail[j - 1];
-      else { // no match
-          fail[i] = 0;
-          i++;
-      }
+    if (pattern.charAt(j) == pattern.charAt(i)) {
+      // j+1 chars match
+      fail[i] = j + 1;
+      i++;
+      j++;
+    } else if (j > 0)
+      // j follows matching prefix
+      j = fail[j - 1];
+    else {
+      // no match
+      fail[i] = 0;
+      i++;
+    }
   }
   return fail;
 }

@@ -65,6 +65,7 @@ recordRoutes.route("/log/add").post(function (req, response) {
     tanggal: req.body.tanggal,
     nama_pengguna: req.body.nama_pengguna,
     nama_penyakit: req.body.nama_penyakit,
+    dna: req.body.dna,
     hasil: req.body.hasil,
     kemiripan: req.body.kemiripan,
   };
