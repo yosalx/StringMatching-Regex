@@ -47,42 +47,29 @@ export default function AddDisease() {
   // This following section will display the form that takes the input from the user.
   return (
     <div style={{ marginTop: "30px" }}>
-      <h4 style={{ display: "flex", justifyContent: "center" }}>Add Disease</h4>
+      <h4 style={{ display: "flex", justifyContent: "center", color: "white" }}>
+        Add Disease
+      </h4>
       <Form
-        onSubmit={onSubmit}
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "20px",
-        }}
+        style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}
       >
-        <Form.Group className="mb-3">
+        <Form.Group
+          className="mb-3"
+          style={{ color: "white", fontStyle: "italic" }}
+        >
           <Form.Label style={{ display: "flex", justifyContent: "center" }}>
             Enter The Disease Name
           </Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder="Name..."
-            id="name"
-            value={form.name}
-            onChange={(e) => updateForm({ name: e.target.value })}
-          />
+          <Form.Control required type="text" placeholder="Name..." />
           <br />
           <Form.Label style={{ display: "flex", justifyContent: "center" }}>
             Input The Sequence DNA
           </Form.Label>
-          <Form.Control
-            required
-            type="file"
-            id="name"
-            value={form.dna}
-            onChange={(e) => updateForm({ dna: e.target.files })}
-          />
+          <Form.Control required type="file" />
           <br />
           <div style={{ display: "flex", justifyContent: "center" }}>
             <Button
-              variant="secondary"
+              variant="success"
               type="submit"
               style={{ display: "flex", justifyContent: "center" }}
             >

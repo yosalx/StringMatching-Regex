@@ -8,19 +8,24 @@ import { useNavigate } from "react-router";
 const History = () => {
   return (
     <div style={{ marginTop: "30px" }}>
-      <h4 style={{ display: "flex", justifyContent: "center" }}>
+      <h4 style={{ display: "flex", justifyContent: "center", color: "white" }}>
         Testing History
       </h4>
       <Form
         style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}
       >
-        <Form.Group className="mb-3">
-          <FloatingLabel label="Search History" className="mb-3">
-            <Form.Control required type="text" placeholder="Name..." />
-          </FloatingLabel>
+        <Form.Group
+          className="mb-3"
+          style={{ color: "white", fontStyle: "italic" }}
+        >
+          <Form.Label style={{ display: "flex", justifyContent: "center" }}>
+            Enter your Keyword
+          </Form.Label>
+          <Form.Control required type="text" placeholder="Search..." />
+          <br />
           <div style={{ display: "flex", justifyContent: "center" }}>
             <Button
-              variant="secondary"
+              variant="success"
               type="submit"
               style={{ display: "flex", justifyContent: "center" }}
             >
