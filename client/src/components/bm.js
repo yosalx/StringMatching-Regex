@@ -1,5 +1,31 @@
 import React from "react";
 
+function bm(diseaseList, dnaTest) {
+  // returning test result, disease name
+  // TODO : add similarity
+  for (let i = 0; i < diseaseList.length; i++) {
+    const disease = diseaseList[i];
+    const pattern = disease.dna;
+    const diseaseName = disease.nama;
+    const result = bmMatch(dnaTest, pattern);
+    if (result > -1) {
+      return { bool: true, nama: diseaseName };
+    }
+    // log
+    console.log(
+      "checking " +
+        dnaTest +
+        " with " +
+        pattern +
+        " (" +
+        diseaseName +
+        ") " +
+        "result -> " +
+        result
+    );
+  }
+}
+
 function bmMatch(text, pattern) {
   let last = buildLast(pattern);
   let n = text.length;
@@ -35,3 +61,5 @@ function buildLast(pattern) {
 
 let pos = bmMatch("nama saya yoseph", "saya");
 console.log(pos);
+
+export default bm;

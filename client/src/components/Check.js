@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import kmpMatch from "./kmp";
-import bmMatch from "./bm";
+import kmp from "./kmp";
+import bm from "./bm";
 import { useNavigate } from "react-router";
 // TODO : add true/false and similary component
 
@@ -10,6 +10,7 @@ const Check = () => {
   // proses bm sama kmp sama similarity
   // return true, false -> similarity
   let dnaString;
+  let patternMatch;
   const [nama_pengguna, setName] = useState("");
   const [dna, setDna] = useState("");
   const [nama_penyakit, setDisease] = useState("");
@@ -20,7 +21,8 @@ const Check = () => {
   const kemiripan = 0.5;
   const form = { tanggal, nama_pengguna, nama_penyakit, dna, hasil, kemiripan };
   const navigate = useNavigate();
-
+  const [dnaList, setDnaList] = useState([]);
+  const [checkResult, setCheckResult] = useState();
   const currDate =
     new Date().getFullYear() +
     "-" +
@@ -56,6 +58,26 @@ const Check = () => {
       window.alert(error);
       return;
     });
+
+    const response = await fetch(`http://localhost:3000/dna_penyakit/`);
+
+    if (!response.ok) {
+      const message = `An error occurred: ${response.statusText}`;
+      window.alert(message);
+      return;
+    }
+
+    const records = await response.json();
+    setDnaList(records);
+    if (method == "kmp") {
+      patternMatch = kmp(dnaList, dna);
+      console.log(patternMatch);
+    } else {
+      patternMatch = bm(dnaList, dna);
+      console.log(patternMatch);
+    }
+    // check if the dna is in the list
+    console.log(dnaList);
 
     navigate("/");
     setShowResult(true);

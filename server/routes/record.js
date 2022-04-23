@@ -10,11 +10,23 @@ const dbo = require("../db/conn");
 // This help convert the id from string to ObjectId for the _id.
 const ObjectId = require("mongodb").ObjectId;
 
-// This section will help you get a list of all the records.
+// This section will help you get a list of all the records (nama, dna)
 recordRoutes.route("/dna_penyakit").get(function (req, res) {
   let db_connect = dbo.getDb("dnapattern");
   db_connect
     .collection("dna_penyakit")
+    .find({}, { nama: 1, dna: 1 })
+    .toArray(function (err, result) {
+      if (err) throw err;
+      res.json(result);
+    });
+});
+
+// This section will help you get a list of all the log
+recordRoutes.route("/log").get(function (req, res) {
+  let db_connect = dbo.getDb("dnapattern");
+  db_connect
+    .collection("log")
     .find({})
     .toArray(function (err, result) {
       if (err) throw err;
@@ -24,7 +36,7 @@ recordRoutes.route("/dna_penyakit").get(function (req, res) {
 
 // This section will help you get a single record by id
 recordRoutes.route("/dna_penyakit/:id").get(function (req, res) {
-  let db_connect = dbo.getDb();
+  let db_connect = dbo.getDb("dnapattern");
   let myquery = { _id: ObjectId(req.params.id) };
   db_connect
     .collection("dna_penyakit")

@@ -24,6 +24,31 @@ function computeFail(pattern) {
   return fail;
 }
 
+function kmp(diseaseList, dnaTest) {
+  // returning test result, disease name
+  // TODO : add similarity
+  for (let i = 0; i < diseaseList.length; i++) {
+    const disease = diseaseList[i];
+    const pattern = disease.dna;
+    const diseaseName = disease.nama;
+    const result = kmpMatch(dnaTest, pattern);
+    if (result > -1) {
+      return { bool: true, nama: diseaseName };
+    }
+    console.log(
+      "checking " +
+        dnaTest +
+        " with " +
+        pattern +
+        " (" +
+        diseaseName +
+        ") " +
+        "result -> " +
+        result
+    );
+  }
+}
+
 function kmpMatch(text, pattern) {
   let n = text.length;
   let m = pattern.length;
@@ -50,3 +75,5 @@ function kmpMatch(text, pattern) {
 
 let pos = kmpMatch("namassayasyoseph", "saya");
 console.log(pos);
+
+export default kmp;
