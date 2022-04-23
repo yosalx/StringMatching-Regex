@@ -10,15 +10,15 @@ const Check = () => {
   // proses bm sama kmp sama similarity
   // return true, false -> similarity
   let dnaString;
-  const [name, setName] = useState("");
+  const [nama_pengguna, setName] = useState("");
   const [dna, setDna] = useState("");
-  const [disease, setDisease] = useState("");
+  const [nama_penyakit, setDisease] = useState("");
   const [method, setMethod] = useState("kmp");
   const [showResult, setShowResult] = useState(false);
-  const date = new Date().toISOString();
+  const tanggal = new Date().toISOString();
   const hasil = true;
   const kemiripan = 0.5;
-  const form = { date, name, disease, dna, hasil, kemiripan };
+  const form = { tanggal, nama_pengguna, nama_penyakit, dna, hasil, kemiripan };
   const navigate = useNavigate();
 
   const currDate =
@@ -30,8 +30,8 @@ const Check = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(name);
-    console.log(disease);
+    console.log(nama_pengguna);
+    console.log(nama_penyakit);
     console.log(method);
     console.log(dna);
     setShowResult(true);
@@ -42,7 +42,7 @@ const Check = () => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const text = e.target.result;
-      setDna({ dna: text });
+      setDna(text);
       console.log(text);
     };
     reader.readAsText(e.target.files[0]);
@@ -100,7 +100,7 @@ const Check = () => {
             required
             type="text"
             placeholder="Name..."
-            value={name}
+            value={nama_pengguna}
             onChange={(e) => setName(e.target.value)}
           />
           <br />
@@ -121,7 +121,7 @@ const Check = () => {
             required
             type="text"
             placeholder="Disease..."
-            value={disease}
+            value={nama_penyakit}
             onChange={(e) => setDisease(e.target.value)}
           />
           <br />
@@ -166,7 +166,7 @@ const Check = () => {
               marginTop: "20px",
             }}
           >
-            Name : {name}
+            Name : {nama_pengguna}
           </div>
           <div
             style={{
@@ -184,7 +184,7 @@ const Check = () => {
               marginTop: "1px",
             }}
           >
-            Disease : {disease}
+            Disease : {nama_penyakit}
           </div>
         </div>
       ) : (
