@@ -28,15 +28,6 @@ const Check = () => {
     "-" +
     new Date().getDate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(nama_pengguna);
-    console.log(nama_penyakit);
-    console.log(method);
-    console.log(dna);
-    setShowResult(true);
-  };
-
   const showFile = (e) => {
     e.preventDefault();
     const reader = new FileReader();
@@ -67,6 +58,7 @@ const Check = () => {
     });
 
     navigate("/");
+    setShowResult(true);
 
     console.log("Form submitted");
     console.log("data :");
@@ -185,6 +177,24 @@ const Check = () => {
             }}
           >
             Disease : {nama_penyakit}
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "1px",
+            }}
+          >
+            Result : {hasil.toString()}
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "1px",
+            }}
+          >
+            Kemiripan : {kemiripan}
           </div>
         </div>
       ) : (
