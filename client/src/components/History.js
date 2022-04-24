@@ -4,12 +4,15 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import Search from "./searchHistory";
+import ListHist from "./ListHist";
 
 // list all the record that match the regex
 
 const History = () => {
   const [logList, setLogList] = useState([]);
   const [inputKey, setInputKey] = useState("");
+  const [showHistory, setShowHistory] = useState(false);
 
   useEffect(() => {
     async function getRecords() {
@@ -30,6 +33,16 @@ const History = () => {
     return;
   }, [logList.length]);
 
+  const onSearch = (e) => {
+    e.preventDefault();
+    console.log(inputKey);
+    if (Search(inputKey).type === "error") {
+      window.alert(Search(inputKey).data.error);
+      return;
+    }
+    setShowHistory(true);
+  }
+
   // check if the dna is in the list
   console.log("Semua Log :");
   console.log(logList);
@@ -41,6 +54,7 @@ const History = () => {
       </h4>
       <Form
         style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}
+        onSubmit={onSearch}
       >
         <Form.Group
           className="mb-3"
@@ -69,6 +83,11 @@ const History = () => {
           </div>
         </Form.Group>
       </Form>
+      {(showHistory && logList > 0) ? 
+      <ListHist 
+        logList={logList}
+      /> 
+      : <div style={{ color: "white", display: "flex", justifyContent: "center", marginTop: "20px" }}>No History to Show</div>}
     </div>
   );
 };

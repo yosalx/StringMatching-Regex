@@ -1,3 +1,5 @@
+import React from 'react';
+
 function Search(pattern) {
   const reTanggal = new RegExp(
     /^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/
@@ -36,9 +38,18 @@ function Search(pattern) {
         penyakit: pattern,
       },
     };
+  } else {
+    return {
+      type: "error",
+      data: {
+        error: "Format pencarian tidak valid",
+      },
+    };
   }
 }
 
 console.log(Search("01 01 2020"));
 console.log(Search("01 10 2022 HIV"));
 console.log(Search("Talasemia12"));
+
+export default Search;

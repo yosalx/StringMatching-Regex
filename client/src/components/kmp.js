@@ -7,7 +7,7 @@ function computeFail(pattern) {
   let j = 0;
   let i = 1;
   while (i < m) {
-    if (pattern.charAt(j) == pattern.charAt(i)) {
+    if (pattern.charAt(j) === pattern.charAt(i)) {
       // j+1 chars match
       fail[i] = j + 1;
       i++;

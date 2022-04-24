@@ -8,3 +8,11 @@
 h1, .borderBottom {
     color: rgb(101, 212, 110) !important;
 }
+
+.log {
+    background: #353946;
+    margin: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+}
