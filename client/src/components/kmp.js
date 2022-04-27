@@ -1,27 +1,24 @@
-import React from "react";
+//import React from "react";
 
-function computeFail(pattern) {
-  const fail = [];
-  fail[0] = 0;
+function kmpBorderFunction(pattern) {
+  const arr = [];
+  arr[0] = 0;
   let m = pattern.length;
   let j = 0;
   let i = 1;
   while (i < m) {
-    if (pattern.charAt(j) === pattern.charAt(i)) {
-      // j+1 chars match
-      fail[i] = j + 1;
-      i++;
+    if (pattern.charAt(j) === pattern.charAt(i)) { // if char at j is same as the next char
       j++;
+      arr[i] = j;
+      i++;
     } else if (j > 0)
-      // j follows matching prefix
-      j = fail[j - 1];
-    else {
-      // no match
-      fail[i] = 0;
+      j = arr[j - 1];
+    else { // no match
+      arr[i] = 0;
       i++;
     }
   }
-  return fail;
+  return arr;
 }
 
 function kmp(diseaseList, dnaTest) {
@@ -31,7 +28,7 @@ function kmp(diseaseList, dnaTest) {
     const disease = diseaseList[i];
     const pattern = disease.dna;
     const diseaseName = disease.nama;
-    const result = kmpMatch(dnaTest, pattern);
+    const result = kmpStringMatching(dnaTest, pattern);
     if (result > -1) {
       return { bool: true, nama: diseaseName };
     }
@@ -49,31 +46,32 @@ function kmp(diseaseList, dnaTest) {
   }
 }
 
-function kmpMatch(text, pattern) {
+function kmpStringMatching(text, pattern) {
   let n = text.length;
   let m = pattern.length;
-  let fail = computeFail(pattern);
+  let arr = kmpBorderFunction(pattern);
   let i = 0;
   let j = 0;
   while (i < n) {
     if (pattern.charAt(j) === text.charAt(i)) {
-      if (j === m - 1) {
-        return i - m + 1;
+      if (j === m - 1) { // if pattern is found
+        temp = i - m + 1;
+        return temp;
       }
       i++;
       j++;
-    } else {
+    } else { // no match
       if (j > 0) {
-        j = fail[j - 1];
+        j = arr[j - 1];
       } else {
         i++;
       }
     }
   }
-  return -1;
+  return -1; // no match at all
 }
 
-let pos = kmpMatch("namassayasyoseph", "saya");
+let pos = kmpStringMatching("namas sa yasyoseph", "yasy");
 console.log(pos);
 
-export default kmp;
+//export default kmp;
