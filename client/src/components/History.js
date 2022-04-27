@@ -1,11 +1,9 @@
 import React from "react";
-import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Search from "./searchHistory";
-import ListHist from "./ListHist";
 
 // list all the record that match the regex
 
@@ -83,10 +81,12 @@ const History = () => {
           </div>
         </Form.Group>
       </Form>
-      {(showHistory && logList > 0) ? 
-      <ListHist 
-        logList={logList}
-      /> 
+      {(showHistory && logList.length > 0) ? 
+      <>
+      {logList.map((log) => (
+        <div key={log._id} className="log" style={{ color: "white", display: "flex", justifyContent: "center", marginTop: "20px" }}>{log.tanggal} - {log.nama_pengguna} - {log.nama_penyakit} - {log.hasil} - {log.kemiripan}</div>
+      ))}
+      </>
       : <div style={{ color: "white", display: "flex", justifyContent: "center", marginTop: "20px" }}>No History to Show</div>}
     </div>
   );
