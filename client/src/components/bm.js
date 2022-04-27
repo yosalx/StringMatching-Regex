@@ -7,7 +7,7 @@ function bm(diseaseList, dnaTest) {
     const disease = diseaseList[i];
     const pattern = disease.dna;
     const diseaseName = disease.nama;
-    const result = bmMatch(dnaTest, pattern);
+    const result = bmStringMatching(dnaTest, pattern);
     if (result > -1) {
       return { bool: true, nama: diseaseName };
     }
@@ -26,8 +26,8 @@ function bm(diseaseList, dnaTest) {
   }
 }
 
-function bmMatch(text, pattern) {
-  let last = buildLast(pattern);
+function bmStringMatching(text, pattern) {
+  let arr = charLastOcc(pattern);
   let n = text.length;
   let m = pattern.length;
   let i = m - 1;
@@ -35,31 +35,31 @@ function bmMatch(text, pattern) {
     return -1;
   }
   let j = m - 1;
-  do {
+  do { // use do-while so the check done atleast once
     if (pattern.charAt(j) === text.charAt(i)) {
       if (j === 0) {
         return i;
       } else {
-        i--;
         j--;
+        i--;
       }
     } else {
-      let lo = last[text.charCodeAt(i)];
-      i = i + m - Math.min(j, 1 + lo);
+      let char = arr[text.charCodeAt(i)];
+      i = i + m - Math.min(j, 1 + char);
       j = m - 1;
     }
   } while (i <= n - 1);
   return -1;
 }
 
-function buildLast(pattern) {
-  const last = [];
-  for (let i = 0; i < 128; i++) last[i] = -1; // initialize array
-  for (let i = 0; i < pattern.length; i++) last[pattern.charCodeAt(i)] = i;
-  return last;
-} // end of buildLast()
+function charLastOcc(pattern) { // find and store the last appearance of each char on the pattern in an array based on ASCII
+  const arr = [];
+  for (let i = 0; i < 256; i++)arr[i] = -1; // initialize the array based on ASCII
+  for (let i = 0; i < pattern.length; i++) arr[pattern.charCodeAt(i)] = i; // store the last appearance of each char on the pattern
+  return arr;
+}
 
-let pos = bmMatch("nama saya yoseph", "saya");
+let pos = bmStringMatching("nama s ayayoseph", "aya");
 console.log(pos);
 
 export default bm;

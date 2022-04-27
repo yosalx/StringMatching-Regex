@@ -1,4 +1,4 @@
-//import React from "react";
+import React from "react";
 
 function kmpBorderFunction(pattern) {
   const arr = [];
@@ -74,4 +74,4 @@ function kmpStringMatching(text, pattern) {
 let pos = kmpStringMatching("namas sa yasyoseph", "yasy");
 console.log(pos);
 
-//export default kmp;
+export default kmp;
