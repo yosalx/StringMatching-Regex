@@ -46,8 +46,77 @@ function Search(pattern) {
   }
 }
 
+const test = [
+  {
+    id: 1,
+    tanggal: "2020-01-02",
+    nama_pengguna: "aox",
+    nama_penyakit: "has",
+    hasil: true,
+    kemiripan: 75,
+  },
+  {
+    id: 1,
+    tanggal: "2020-01-03",
+    nama_pengguna: "aoq",
+    nama_penyakit: "has",
+    hasil: true,
+    kemiripan: 75,
+  },
+  {
+    id: 1,
+    tanggal: "2020-01-04",
+    nama_pengguna: "aor",
+    nama_penyakit: "ha",
+    hasil: true,
+    kemiripan: 75,
+  },
+  {
+    id: 1,
+    tanggal: "2020-01-01",
+    nama_pengguna: "aoa",
+    nama_penyakit: "haq",
+    hasil: true,
+    kemiripan: 75,
+  },
+];
+
+let result = [];
+
+function searchFromDatabase(input) {
+  let tipe = Search(input);
+  if (tipe.type === "tanggal") {
+    let search =
+      tipe.data.tahun + "-" + tipe.data.bulan + "-" + tipe.data.tanggal;
+    for (let i = 0; i < test.length; i++) {
+      if (search === test[i].tanggal) {
+        result.push(test[i]);
+        console.log(test[i]);
+      }
+    }
+  } else if (tipe.type === "penyakit") {
+    let search = tipe.data.penyakit;
+    for (let i = 0; i < test.length; i++) {
+      if (search === test[i].nama_penyakit) {
+        result.push(test[i]);
+        console.log(test[i]);
+      }
+    }
+  } else if (tipe.type === "tanggalPenyakit") {
+    let search =
+      tipe.data.tahun + "-" + tipe.data.bulan + "-" + tipe.data.tanggal;
+    let penyakit = tipe.data.penyakit;
+    for (let i = 0; i < test.length; i++) {
+      if (search === test[i].tanggal && penyakit === test[i].nama_penyakit) {
+        result.push(test[i]);
+        console.log(test[i]);
+      }
+    }
+  }
+}
+
 console.log(Search("01 01 2020"));
 console.log(Search("01 10 2022 HIV"));
 console.log(Search("Talasemia12"));
 
-// export default Search;
+export default Search;

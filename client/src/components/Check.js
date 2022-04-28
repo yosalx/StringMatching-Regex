@@ -9,17 +9,26 @@ import { useNavigate } from "react-router";
 const Check = () => {
   // proses bm sama kmp sama similarity
   // return true, false -> similarity
+  let name;
   let dnaString;
-  let patternMatch;
   const [nama_pengguna, setName] = useState("");
+  const [checkNama, setCheckNama] = useState("");
   const [dna, setDna] = useState("");
   const [nama_penyakit, setDisease] = useState("");
+  const [checkPenyakit, setCheckPenyakit] = useState("");
   const [method, setMethod] = useState("kmp");
-  const [showResult, setShowResult] = useState(false);
+  const [showResult, setShowResult] = useState();
   const tanggal = new Date().toISOString();
   const [hasil, setHasil] = useState(false);
   const [kemiripan, setKemiripan] = useState(0);
-  const form = { tanggal, nama_pengguna, nama_penyakit, dna, hasil, kemiripan };
+  const form = {
+    tanggal: tanggal,
+    nama_pengguna: nama_pengguna,
+    nama_penyakit: nama_penyakit,
+    dna: dna,
+    hasil: hasil,
+    kemiripan: kemiripan,
+  };
   const navigate = useNavigate();
   const [dnaList, setDnaList] = useState([]);
   const [checkResult, setCheckResult] = useState();
@@ -41,67 +50,106 @@ const Check = () => {
     reader.readAsText(e.target.files[0]);
   };
 
-  // async function getRecords() {
-  //   const response = await fetch(`http://localhost:3000/dna_penyakit/`);
+  useEffect(() => {
+    async function getRecords() {
+      const response = await fetch(`http://localhost:3000/dna_penyakit/`);
+      console.log(response);
+      if (!response.ok) {
+        const message = `An error occurred: ${response.statusText}`;
+        window.alert(message);
+        return;
+      }
 
-  //   if (!response.ok) {
-  //     const message = `An error occurred: ${response.statusText}`;
-  //     window.alert(message);
-  //     return;
-  //   }
+      const records = await response.json();
+      setDnaList(records);
+    }
 
-  //   const records = await response.json();
-  //   setDnaList(records);
-  //   console.log("Dna List : " + dnaList);
-  // }
+    getRecords();
+    console.log("Log List : " + dnaList);
+    console.log("Form awal " + form.hasil + " " + form.kemiripan);
 
-  // menangani submit histor
+    return;
+  }, [dnaList.length]);
+
   async function onSubmit(e) {
     // getRecords();
     // Todo : count similarity
     e.preventDefault();
-    console.log("submit button clicked");
-    const response = await fetch(`http://localhost:3000/dna_penyakit/`);
 
-    if (!response.ok) {
-      const message = `An error occurred: ${response.statusText}`;
-      window.alert(message);
-      return;
-    }
+    // check regex dna
+    const reDNA = new RegExp(/^[ATCG]+$/);
+    if (reDNA.test(dna)) {
+      // const response = await fetch(`http://localhost:3000/dna_penyakit/`);
+      // console.log(response);
+      // if (!response.ok) {
+      //   const message = `An error occurred: ${response.statusText}`;
+      //   window.alert(message);
+      //   return;
+      // }
 
-    const records = await response.json();
-    setDnaList(records);
-    console.log("Dna List : " + dnaList);
-    if (method === "kmp") {
-      patternMatch = kmp(dnaList, dna);
-      setHasil(patternMatch.bool);
-      console.log("patternMatchResult -> " + patternMatch);
+      // const records = await response.json();
+      // setDnaList(records);
+
+      // print all dna list
+      if (dnaList !== null) {
+        for (let i = 0; i < dnaList.length; i++) {
+          console.log("nama_penyakit" + dnaList[i].nama);
+          console.log("dna" + dnaList[i].dna);
+        }
+      } else {
+        console.log("dna list is empty");
+      }
+
+      console.log("Dna input : " + dna);
+      console.log(method);
+      // { nama: "", dna: "" }
+      if (method === "kmp") {
+        let patternMatch = kmp(dnaList, dna, nama_penyakit);
+        console.log("patternMatchResult -> " + patternMatch.bool);
+        console.log("patternMatchResult -> " + patternMatch.nama);
+        console.log("patternMatchResult -> " + patternMatch.similarity);
+        setKemiripan(patternMatch.similarity);
+        setHasil(patternMatch.bool);
+        form.hasil = patternMatch.bool;
+        form.kemiripan = patternMatch.similarity;
+      } else {
+        let patternMatch = bm(dnaList, dna, nama_penyakit);
+        console.log("patternMatchResult -> " + patternMatch.bool);
+        console.log("patternMatchResult -> " + patternMatch.nama);
+        console.log("patternMatchResult -> " + patternMatch.similarity);
+        setKemiripan(patternMatch.similarity);
+        setHasil(patternMatch.bool);
+        form.hasil = patternMatch.bool;
+        form.kemiripan = patternMatch.similarity;
+      }
+
+      console.log("Form akhir " + form.hasil + " " + form.kemiripan);
+      // check if the dna is in the list
+
+      // When a post request is sent to the create url, we'll add a new record to the database.
+      let newLog = { ...form };
+      await fetch("http://localhost:3000/log/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newLog),
+      }).catch((error) => {
+        window.alert(error);
+        return;
+      });
+
+      navigate("/");
+      setShowResult(true);
+      setCheckNama(nama_pengguna);
+      setCheckPenyakit(nama_penyakit);
+
+      console.log("Form submitted");
+      console.log("data :");
+      console.log(newLog);
     } else {
-      patternMatch = bm(dnaList, dna);
-      setHasil(patternMatch.bool);
-      console.log("patternMatchResult -> " + patternMatch);
+      window.alert("DNA masukan tidak valid, harus berupa ATCG");
     }
-    // check if the dna is in the list
-
-    // When a post request is sent to the create url, we'll add a new record to the database.
-    const newLog = { ...form };
-    await fetch("http://localhost:3000/log/add", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newLog),
-    }).catch((error) => {
-      window.alert(error);
-      return;
-    });
-
-    navigate("/");
-    setShowResult(true);
-
-    console.log("Form submitted");
-    console.log("data :");
-    console.log(newLog);
   }
 
   return (
@@ -197,7 +245,7 @@ const Check = () => {
               marginTop: "20px",
             }}
           >
-            Name : {nama_pengguna}
+            Name : {checkNama}
           </div>
           <div
             style={{
@@ -215,7 +263,7 @@ const Check = () => {
               marginTop: "1px",
             }}
           >
-            Disease : {nama_penyakit}
+            Disease : {checkPenyakit}
           </div>
           <div
             style={{

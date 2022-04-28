@@ -1,4 +1,5 @@
 import React from "react";
+import similarity from "./similarity";
 
 function kmpBorderFunction(pattern) {
   const arr = [];
@@ -22,29 +23,57 @@ function kmpBorderFunction(pattern) {
   return arr;
 }
 
-function kmp(diseaseList, dnaTest) {
+function kmp(diseaseList, dnaTest, nama_penyakit) {
   // returning test result, disease name
   // TODO : add similarity
   for (let i = 0; i < diseaseList.length; i++) {
-    const disease = diseaseList[i];
-    const pattern = disease.dna;
-    const diseaseName = disease.nama;
-    const result = kmpStringMatching(dnaTest, pattern);
-    if (result > -1) {
-      return { bool: true, nama: diseaseName };
+    // const disease = diseaseList[i];
+    // const pattern = disease.dna;
+    // const diseaseName = disease.nama;
+    if (diseaseList[i].nama === nama_penyakit) {
+      const pattern = diseaseList[i].dna;
+      const diseaseName = diseaseList[i].nama;
+      const result = kmpStringMatching(dnaTest, pattern);
+      if (result > -1) {
+        console.log(
+          "checking " +
+            dnaTest +
+            " with " +
+            pattern +
+            " (" +
+            diseaseName +
+            ") " +
+            "result -> " +
+            result
+        );
+        return {
+          bool: true,
+          nama: diseaseName,
+          similarity: similarity(dnaTest, pattern),
+        };
+      } else {
+        console.log(
+          "checking " +
+            dnaTest +
+            " with " +
+            pattern +
+            " (" +
+            diseaseName +
+            ") " +
+            "result -> " +
+            result
+        );
+        let percentate = similarity(dnaTest, pattern);
+        console.log("similarity " + percentate);
+        if (percentate >= 80) {
+          return { bool: true, nama: diseaseName, similarity: percentate };
+        } else {
+          return { bool: false, nama: diseaseName, similarity: percentate };
+        }
+      }
     }
-    console.log(
-      "checking " +
-        dnaTest +
-        " with " +
-        pattern +
-        " (" +
-        diseaseName +
-        ") " +
-        "result -> " +
-        result
-    );
   }
+  return { bool: false, nama: "" };
 }
 
 function kmpStringMatching(text, pattern) {

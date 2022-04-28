@@ -8,9 +8,52 @@ import Search from "./searchHistory";
 // list all the record that match the regex
 
 const History = () => {
-  const [logList, setLogList] = useState([]);
   const [inputKey, setInputKey] = useState("");
+  const [logList, setLogList] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
+  const [resultQuery, setResultQuery] = useState([]);
+
+  let result = [];
+
+  function searchFromDatabase(logList) {
+    result = [];
+    let tipe = Search(inputKey);
+    if (tipe.type === "tanggal") {
+      let search =
+        tipe.data.tahun + "-" + tipe.data.bulan + "-" + tipe.data.tanggal;
+      for (let i = 0; i < logList.length; i++) {
+        console.log(logList[i].tanggal);
+        let checkingDateDB =
+          logList[i].tanggal && logList[i].tanggal.substring(0, 10);
+        console.log(checkingDateDB);
+        if (search === checkingDateDB) {
+          result.push(logList[i]);
+        }
+      }
+    } else if (tipe.type === "penyakit") {
+      let search = tipe.data.penyakit;
+      for (let i = 0; i < logList.length; i++) {
+        if (search === logList[i].nama_penyakit) {
+          result.push(logList[i]);
+        }
+      }
+    } else if (tipe.type === "tanggalPenyakit") {
+      let search =
+        tipe.data.tahun + "-" + tipe.data.bulan + "-" + tipe.data.tanggal;
+      let penyakit = tipe.data.penyakit;
+      for (let i = 0; i < logList.length; i++) {
+        var checkingDateDB =
+          logList[i].tanggal && logList[i].tanggal.substring(0, 10);
+        if (
+          search === checkingDateDB &&
+          penyakit === logList[i].nama_penyakit
+        ) {
+          result.push(logList[i]);
+        }
+      }
+    }
+    setResultQuery(result);
+  }
 
   useEffect(() => {
     async function getRecords() {
@@ -35,11 +78,11 @@ const History = () => {
   const onSearch = (e) => {
     e.preventDefault();
     console.log(inputKey);
-    if (Search(inputKey).type === "error") {
-      window.alert(Search(inputKey).data.error);
-      return;
-    }
-    let searchType = Search(inputKey).type;
+    // if (Search(inputKey).type === "error") {
+    //   window.alert(Search(inputKey).data.error);
+    //   return;
+    // }
+    // let searchType = Search(inputKey).type;
     // if (searchType === "tanggal") {
     //   let fbulan = Search(inputKey).data.bulan;
     //   let ftahun = Search(inputKey).data.tahun;
@@ -63,12 +106,14 @@ const History = () => {
     //   const records = response.json();
     //   console.log(records);
     // }
+    searchFromDatabase(logList);
+    console.log(resultQuery);
+    console.log(resultQuery.length);
+    setResultQuery(result);
+    console.log(resultQuery);
+    console.log(resultQuery.length);
     setShowHistory(true);
   };
-
-  // check if the dna is in the list
-  console.log("Semua Log :");
-  console.log(logList);
 
   return (
     <div style={{ marginTop: "30px" }}>
@@ -106,11 +151,11 @@ const History = () => {
           </div>
         </Form.Group>
       </Form>
-      {showHistory && logList.length > 0 ? (
+      {showHistory && resultQuery.length > 0 ? (
         <>
-          {logList.map((log) => (
+          {resultQuery.map((result) => (
             <div
-              key={log._id}
+              key={result._id}
               className="log"
               style={{
                 color: "white",
@@ -119,8 +164,9 @@ const History = () => {
                 marginTop: "20px",
               }}
             >
-              {log.tanggal} - {log.nama_pengguna} - {log.nama_penyakit} -{" "}
-              {log.hasil} - {log.kemiripan}
+              {result.tanggal.substring(0, 10)} - {result.nama_pengguna} -
+              {result.nama_penyakit}- {result.hasil.toString()} -
+              {result.kemiripan}%
             </div>
           ))}
         </>

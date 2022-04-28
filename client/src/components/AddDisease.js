@@ -36,17 +36,23 @@ export default function AddDisease() {
 
     // When a post request is sent to the create url, we'll add a new record to the database.
     const newDisease = { ...form };
-
-    await fetch("http://localhost:3000/dna_penyakit/add", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newDisease),
-    }).catch((error) => {
-      window.alert(error);
+    // check regex dna
+    const reDNA = new RegExp(/^[ATCG]+$/);
+    if (reDNA.test(newDisease.dna)) {
+      await fetch("http://localhost:3000/dna_penyakit/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newDisease),
+      }).catch((error) => {
+        window.alert(error);
+        return;
+      });
+    } else {
+      window.alert("DNA tidak valid, harus berupa karakter ATCG");
       return;
-    });
+    }
 
     setForm({ nama: "", dna: "" });
     navigate("/");

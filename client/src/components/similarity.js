@@ -15,7 +15,10 @@ function similarity(text, pattern) {
     }
     j++;
   }
-  return ((pattern.length - smallest_distance) / pattern.length) * 100;
+  let result = Number.parseFloat(
+    ((pattern.length - smallest_distance) / pattern.length) * 100
+  ).toFixed(2);
+  return result;
 }
 
 let test = similarity("abcghfabcdhiabcdeg", "abcdef");
@@ -23,3 +26,5 @@ console.log(test);
 
 // for disease in diseases:
 //     if similarity(disease, text) > 0.5:
+
+export default similarity;
