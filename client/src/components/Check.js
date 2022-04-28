@@ -17,8 +17,8 @@ const Check = () => {
   const [method, setMethod] = useState("kmp");
   const [showResult, setShowResult] = useState(false);
   const tanggal = new Date().toISOString();
-  const hasil = true;
-  const kemiripan = 0.5;
+  const [hasil, setHasil] = useState(false);
+  const [kemiripan, setKemiripan] = useState(0);
   const form = { tanggal, nama_pengguna, nama_penyakit, dna, hasil, kemiripan };
   const navigate = useNavigate();
   const [dnaList, setDnaList] = useState([]);
@@ -41,24 +41,26 @@ const Check = () => {
     reader.readAsText(e.target.files[0]);
   };
 
+  // async function getRecords() {
+  //   const response = await fetch(`http://localhost:3000/dna_penyakit/`);
+
+  //   if (!response.ok) {
+  //     const message = `An error occurred: ${response.statusText}`;
+  //     window.alert(message);
+  //     return;
+  //   }
+
+  //   const records = await response.json();
+  //   setDnaList(records);
+  //   console.log("Dna List : " + dnaList);
+  // }
+
   // menangani submit histor
   async function onSubmit(e) {
+    // getRecords();
+    // Todo : count similarity
     e.preventDefault();
-
-    // When a post request is sent to the create url, we'll add a new record to the database.
-    const newLog = { ...form };
-
-    await fetch("http://localhost:3000/log/add", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newLog),
-    }).catch((error) => {
-      window.alert(error);
-      return;
-    });
-
+    console.log("submit button clicked");
     const response = await fetch(`http://localhost:3000/dna_penyakit/`);
 
     if (!response.ok) {
@@ -69,15 +71,30 @@ const Check = () => {
 
     const records = await response.json();
     setDnaList(records);
-    if (method == "kmp") {
+    console.log("Dna List : " + dnaList);
+    if (method === "kmp") {
       patternMatch = kmp(dnaList, dna);
-      console.log(patternMatch);
+      setHasil(patternMatch.bool);
+      console.log("patternMatchResult -> " + patternMatch);
     } else {
       patternMatch = bm(dnaList, dna);
-      console.log(patternMatch);
+      setHasil(patternMatch.bool);
+      console.log("patternMatchResult -> " + patternMatch);
     }
     // check if the dna is in the list
-    console.log(dnaList);
+
+    // When a post request is sent to the create url, we'll add a new record to the database.
+    const newLog = { ...form };
+    await fetch("http://localhost:3000/log/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newLog),
+    }).catch((error) => {
+      window.alert(error);
+      return;
+    });
 
     navigate("/");
     setShowResult(true);

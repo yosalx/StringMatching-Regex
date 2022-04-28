@@ -27,6 +27,7 @@ const History = () => {
     }
 
     getRecords();
+    console.log("Log List : " + logList);
 
     return;
   }, [logList.length]);
@@ -38,8 +39,32 @@ const History = () => {
       window.alert(Search(inputKey).data.error);
       return;
     }
+    let searchType = Search(inputKey).type;
+    // if (searchType === "tanggal") {
+    //   let fbulan = Search(inputKey).data.bulan;
+    //   let ftahun = Search(inputKey).data.tahun;
+    //   let ftanggal = Search(inputKey).data.tanggal;
+    //   const response = fetch(
+    //     `http://localhost:3000/log/${tanggal + bulan + tahun}`,
+    //     {
+    //       method: "GET",
+    //       body: JSON.stringify({
+    //         tanggal: ftanggal,
+    //         bulan: fbulan,
+    //         tahun: ftahun,
+    //       }),
+    //     }
+    //   );
+    //   if (!response.ok) {
+    //     const message = `An error occurred: ${response.statusText}`;
+    //     window.alert(message);
+    //     return;
+    //   }
+    //   const records = response.json();
+    //   console.log(records);
+    // }
     setShowHistory(true);
-  }
+  };
 
   // check if the dna is in the list
   console.log("Semua Log :");
@@ -81,13 +106,36 @@ const History = () => {
           </div>
         </Form.Group>
       </Form>
-      {(showHistory && logList.length > 0) ? 
-      <>
-      {logList.map((log) => (
-        <div key={log._id} className="log" style={{ color: "white", display: "flex", justifyContent: "center", marginTop: "20px" }}>{log.tanggal} - {log.nama_pengguna} - {log.nama_penyakit} - {log.hasil} - {log.kemiripan}</div>
-      ))}
-      </>
-      : <div style={{ color: "white", display: "flex", justifyContent: "center", marginTop: "20px" }}>No History to Show</div>}
+      {showHistory && logList.length > 0 ? (
+        <>
+          {logList.map((log) => (
+            <div
+              key={log._id}
+              className="log"
+              style={{
+                color: "white",
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "20px",
+              }}
+            >
+              {log.tanggal} - {log.nama_pengguna} - {log.nama_penyakit} -{" "}
+              {log.hasil} - {log.kemiripan}
+            </div>
+          ))}
+        </>
+      ) : (
+        <div
+          style={{
+            color: "white",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          No History to Show
+        </div>
+      )}
     </div>
   );
 };

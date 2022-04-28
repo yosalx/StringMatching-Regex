@@ -34,6 +34,55 @@ recordRoutes.route("/log").get(function (req, res) {
     });
 });
 
+recordRoutes.route("/log/:nama_penyakit").get(function (req, res) {
+  let db_connect = dbo.getDb("dnapattern");
+  let myquery = { nama_penyakit: req.params.nama_penyakit };
+  db_connect
+    .collection("log")
+    .find(myquery)
+    .toArray(function (err, result) {
+      if (err) throw err;
+      res.json(result);
+    });
+});
+
+recordRoutes.route("/log/:tanggal").get(function (req, res) {
+  let db_connect = dbo.getDb("dnapattern");
+  let myquery = {
+    tanggal: {
+      $month: new Date(req.body.tanggal).getMonth() + 1,
+      $day: new Date(req.body.tanggal).getDate(),
+      $year: new Date(req.body.tanggal).getFullYear(),
+    },
+  };
+  db_connect
+    .collection("log")
+    .find(myquery)
+    .toArray(function (err, result) {
+      if (err) throw err;
+      res.json(result);
+    });
+});
+// find all records created by tanggal penyakit
+recordRoutes.route("/log/:tanggal/:nama_penyakit").get(function (req, res) {
+  let db_connect = dbo.getDb("dnapattern");
+  let myquery = {
+    tanggal: {
+      $month: new Date(req.params.tanggal).getMonth() + 1,
+      $day: new Date(req.params.tanggal).getDate(),
+      $year: new Date(req.params.tanggal).getFullYear(),
+    },
+    nama_penyakit: req.params.nama_penyakit,
+  };
+  db_connect
+    .collection("log")
+    .find(myquery)
+    .toArray(function (err, result) {
+      if (err) throw err;
+      res.json(result);
+    });
+});
+
 // This section will help you get a single record by id
 recordRoutes.route("/dna_penyakit/:id").get(function (req, res) {
   let db_connect = dbo.getDb("dnapattern");
