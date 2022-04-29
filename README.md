@@ -30,3 +30,6 @@
 
 ## Sources
 - [Spesifikasi Tugas Besar 3](https://informatika.stei.itb.ac.id/~rinaldi.munir/Stmik/2021-2022/Tugas-Besar-3-IF2211-Strategi-Algoritma-2022.pdf)
+
+## Video
+- [Youtube](https://youtu.be/1wnq1liqbT4)
