@@ -78,10 +78,10 @@ const History = () => {
   const onSearch = (e) => {
     e.preventDefault();
     console.log(inputKey);
-    // if (Search(inputKey).type === "error") {
-    //   window.alert(Search(inputKey).data.error);
-    //   return;
-    // }
+    if (Search(inputKey).type === "error") {
+      window.alert(Search(inputKey).data.error);
+      return;
+    }
     // let searchType = Search(inputKey).type;
     // if (searchType === "tanggal") {
     //   let fbulan = Search(inputKey).data.bulan;
