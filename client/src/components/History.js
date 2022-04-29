@@ -57,7 +57,7 @@ const History = () => {
 
   useEffect(() => {
     async function getRecords() {
-      const response = await fetch(`http://localhost:3000/log/`);
+      const response = await fetch(`https://backend-website-dnapattern.herokuapp.com/log/`);
 
       if (!response.ok) {
         const message = `An error occurred: ${response.statusText}`;

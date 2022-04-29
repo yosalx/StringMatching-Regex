@@ -39,7 +39,7 @@ export default function AddDisease() {
     // check regex dna
     const reDNA = new RegExp(/^[ATCG]+$/);
     if (reDNA.test(newDisease.dna)) {
-      await fetch("http://localhost:3000/dna_penyakit/add", {
+      await fetch("https://backend-website-dnapattern.herokuapp.com/dna_penyakit/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

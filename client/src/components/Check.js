@@ -128,7 +128,7 @@ const Check = () => {
 
       // When a post request is sent to the create url, we'll add a new record to the database.
       let newLog = { ...form };
-      await fetch("http://localhost:3000/log/add", {
+      await fetch("https://backend-website-dnapattern.herokuapp.com/log/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
