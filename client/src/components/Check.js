@@ -52,7 +52,7 @@ const Check = () => {
 
   useEffect(() => {
     async function getRecords() {
-      const response = await fetch(`http://localhost:3000/dna_penyakit/`);
+      const response = await fetch(`https://dnapattern.vercel.app/history/dna_penyakit/`);
       console.log(response);
       if (!response.ok) {
         const message = `An error occurred: ${response.statusText}`;
